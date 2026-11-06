@@ -1,0 +1,12 @@
+{
+  "name": "John Smith",
+  "age": 35,
+  "email": "john@email.com",
+  "phone": "555-1234",
+  "monthly_income": 4500,
+  "existing_debt": 1200,
+  "job": "Software Developer",
+  "work_years": 3.5,
+  "credit_score": "good",
+  "loan_purpose": "debt_consolidation"
+}

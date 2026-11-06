@@ -1,0 +1,17 @@
+{
+  "status": "SUCCESS",
+  "applicant_name": "John Smith6",
+  "loan_amount": 5000,
+  "currency": "USDT",
+  "application_score": 85,
+  "decision": {
+    "status": "APPROVED",
+    "reason": "Excellent application! All criteria met.",
+    "interest_rate": 8.5,
+    "monthly_payment": 439.12,
+    "term_months": 12,
+    "confidence": "HIGH"
+  },
+  "timestamp": "2025-09-16T10:04:37.295973",
+  "application_id": "LOAN20250916100437"
+}

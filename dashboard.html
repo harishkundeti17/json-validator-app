@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Dashboard - 5000 USDT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏦 Personal Loan Dashboard</h1>
+            <p>Apply for your <strong>$5,000 USDT</strong> instant loan</p>
+        </header>
+
+        <div class="loan-info">
+            <div class="amount">$5,000 USDT</div>
+            <div class="details">Instant Decision • Quick Approval • Secure Processing</div>
+        </div>
+
+        <form id="loanForm" class="loan-form">
+            <div class="section">
+                <h2>📋 Personal Information</h2>
+                
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" name="age" min="18" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💼 Employment Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="job">Job Title</label>
+                        <input type="text" id="job" name="job" placeholder="e.g. Software Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="work_years">Years at Current Job</label>
+                        <input type="number" id="work_years" name="work_years" min="0" step="0.1" placeholder="e.g. 2.5">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💰 Financial Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="monthly_income">Monthly Income ($) *</label>
+                        <input type="number" id="monthly_income" name="monthly_income" min="1000" step="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="existing_debt">Existing Debt ($)</label>
+                        <input type="number" id="existing_debt" name="existing_debt" min="0" step="100" placeholder="0">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="credit_score">Credit Score Range *</label>
+                    <select id="credit_score" name="credit_score" required>
+                        <option value="">Select your credit score range</option>
+                        <option value="excellent">Excellent (750+)</option>
+                        <option value="good">Good (650-749)</option>
+                        <option value="fair">Fair (550-649)</option>
+                        <option value="poor">Poor (below 550)</option>
+                        <option value="unknown">Don't know</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Loan Purpose</h2>
+                
+                <div class="form-group">
+                    <label for="loan_purpose">What will you use this loan for?</label>
+                    <select id="loan_purpose" name="loan_purpose" required>
+                        <option value="">Select loan purpose</option>
+                        <option value="debt_consolidation">Debt Consolidation</option>
+                        <option value="home_improvement">Home Improvement</option>
+                        <option value="medical">Medical Expenses</option>
+                        <option value="education">Education</option>
+                        <option value="emergency">Emergency</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" onclick="loadSampleData()" class="btn-secondary">
+                    Load Sample Data
+                </button>
+                <button type="submit" class="btn-primary">
+                    Apply for Loan
+                </button>
+            </div>
+        </form>
+
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Load sample data function
+        function loadSampleData() {
+            document.getElementById('name').value = 'John Smith';
+            document.getElementById('age').value = '35';
+            document.getElementById('email').value = 'john@email.com';
+            document.getElementById('phone').value = '555-1234';
+            document.getElementById('monthly_income').value = '4500';
+            document.getElementById('existing_debt').value = '1200';
+            document.getElementById('job').value = 'Software Developer';
+            document.getElementById('work_years').value = '3.5';
+            document.getElementById('credit_score').value = 'good';
+            document.getElementById('loan_purpose').value = 'debt_consolidation';
+        }
+
+        // Form submission
+        document.getElementById('loanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.btn-primary');
+            const resultDiv = document.getElementById('result');
+            
+            // Show loading
+            submitBtn.textContent = 'Processing...';
+            submitBtn.disabled = true;
+            
+            // Get form data
+            const formData = new FormData(this);
+            
+            // Submit to server
+            fetch('/submit-loan', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResult(data);
+                submitBtn.textContent = 'Apply for Loan';
+                submitBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayResult({
+                    status: 'ERROR',
+                    errors: ['Connection error. Please try again.']
+                });
+                submitBtn.textContent = 'Apply for Loan';
+                submitBtn.disabled = false;
+            });
+        });
+
+        function displayResult(data) {
+            const resultDiv = document.getElementById('result');
+            
+            if (data.status === 'ERROR') {
+                resultDiv.innerHTML = `
+                    <div class="result-error">
+                        <h2>❌ Application Error</h2>
+                        <ul>
+                            ${data.errors.map(error => `<li>${error}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            } else {
+                const decision = data.decision;
+                const statusClass = decision.status.toLowerCase();
+                const statusIcon = {
+                    'approved': '✅',
+                    'conditional': '⚠️',
+                    'declined': '❌'
+                }[decision.status.toLowerCase()] || '📋';
+                
+                let resultHTML = `
+                    <div class="result-${statusClass}">
+                        <h2>${statusIcon} Loan Application Result</h2>
+                        <div class="result-header">
+                            <p><strong>Applicant:</strong> ${data.applicant_name}</p>
+                            <p><strong>Application ID:</strong> ${data.application_id}</p>
+                            <p><strong>Loan Amount:</strong> $${data.loan_amount} ${data.currency}</p>
+                            <p><strong>Score:</strong> ${data.application_score}/100</p>
+                        </div>
+                        
+                        <div class="decision-box">
+                            <h3>Decision: ${decision.status}</h3>
+                            <p>${decision.reason}</p>
+                        </div>
+                `;
+                
+                if (decision.status === 'APPROVED' || decision.status === 'CONDITIONAL') {
+                    resultHTML += `
+                        <div class="loan-terms">
+                            <h3>Loan Terms</h3>
+                            <div class="terms-grid">
+                                <div><strong>Interest Rate:</strong> ${decision.interest_rate}%</div>
+                                <div><strong>Monthly Payment:</strong> $${decision.monthly_payment}</div>
+                                <div><strong>Loan Term:</strong> ${decision.term_months} months</div>
+                                <div><strong>Confidence:</strong> ${decision.confidence}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    if (decision.required_documents) {
+                        resultHTML += `
+                            <div class="required-docs">
+                                <h3>Required Documents</h3>
+                                <ul>
+                                    ${decision.required_documents.map(doc => `<li>${doc}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                } else if (decision.suggestions) {
+                    resultHTML += `
+                        <div class="suggestions">
+                            <h3>Suggestions for Future Applications</h3>
+                            <ul>
+                                ${decision.suggestions.map(suggestion => `<li>${suggestion}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+                
+                resultHTML += '</div>';
+                resultDiv.innerHTML = resultHTML;
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

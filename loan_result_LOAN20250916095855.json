@@ -1,0 +1,17 @@
+{
+  "status": "SUCCESS",
+  "applicant_name": "Harish Kumar Kundeti",
+  "loan_amount": 5000,
+  "currency": "USDT",
+  "application_score": 75,
+  "decision": {
+    "status": "APPROVED",
+    "reason": "Good application with standard terms.",
+    "interest_rate": 12.5,
+    "monthly_payment": 451.58,
+    "term_months": 12,
+    "confidence": "MEDIUM"
+  },
+  "timestamp": "2025-09-16T09:58:55.732261",
+  "application_id": "LOAN20250916095855"
+}
